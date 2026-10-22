@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug dungeon-quest",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}\\dungeon.exe",
+      "cwd": "${workspaceFolder}",
+      "externalConsole": true,
+      "MIMode": "gdb",
+      "miDebuggerPath": "C:\\msys64\\ucrt64\\bin\\gdb.exe"
+    }
+  ]
+}

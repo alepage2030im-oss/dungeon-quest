@@ -11,9 +11,13 @@
 int guardian_comparar(int secreto, int intento)
 {
     /* TODO (Lab 06): un if / else if / else que devuelva 1, -1 o 0. */
-    (void) secreto;
-    (void) intento;
-    return 0;
+    if (secreto == intento) {
+        return 0;
+    } else if (secreto < intento) {
+        return -1;
+    } else {
+        return 1;
+    }
 }
 
 int guardian_jugar(int intentos)
@@ -33,7 +37,21 @@ int guardian_jugar(int intentos)
      * Si lo llamas en cada partida, dos partidas seguidas pueden tener la
      * misma clave.
      */
-    (void) intentos;
-    printf("  (el guardian todavia no ha llegado a la puerta)\n");
+    int secreto = rand() % 100 + 1;
+
+    for (int i = 1; i <= intentos; i++) {
+        printf("Intento %d de %d.\n", i, intentos);
+        int intento = get_int ("Adivina el numero secreto (1-100): ");
+        int resultado = guardian_comparar(secreto, intento);
+        if (resultado == 0) {
+            printf(" Felicidades! Adivinaste el número secreto.\n");
+            return 1;
+        } else if (resultado < 0) {
+            printf("El numero secreto es menor que %d. Intenta de nuevo.\n", intento);
+        } else {
+            printf("El numero secreto es mayor que %d. Intenta de nuevo.\n", intento);
+        }
+    }
+    printf("Se acabaron los intentos. El numero secreto era %d.\n", secreto);
     return 0;
 }

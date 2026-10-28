@@ -35,5 +35,17 @@ void cronometro_tabla(void)
      *
      * Usa %ld para long y %f para double.
      */
-    printf("  (el cronometro todavia no esta implementado)\n");
+    long ns_simple[] = {1000000L, 10000000L, 100000000L};
+    long ns_double[] = {1000L, 3000L, 10000L};
+    long r;
+
+    for (int i = 0; i < 3; i++) {
+        double t = medir(simple_loop, ns_simple[i], &r);
+        printf("simple_loop %ld %.6f\n", ns_simple[i], t);
+    }
+    for (int i = 0; i < 3; i++) {
+        double t = medir(double_loop, ns_double[i], &r);
+        printf("double_loop %ld %.6f\n", ns_double[i], t);
+    }
+    
 }

@@ -21,11 +21,13 @@
  * ------------------------------------------------------------------------- */
 long mcd(long a, long b)
 {
-    /* TODO (Lab 06) */
-    (void) a;          /* estas dos lineas evitan el aviso "parametro sin  */
-    (void) b;          /* usar". Borralas cuando escribas la funcion.       */
-    return 0;
-}
+    while (b !=0) {
+        long temp = a % b;
+        a = b;
+        b = temp;
+    }
+    return a;
+} 
 
 /* ---------------------------------------------------------------------------
  * PYTHON:
@@ -41,23 +43,33 @@ long mcd(long a, long b)
  * ------------------------------------------------------------------------- */
 long long fibonacci(int n)
 {
-    /* TODO (Lab 06) */
-    (void) n;
-    return 0;
+    long long a = 0, b = 1;
+    for (int i = 0; i< n; i++) {
+        long long temp = a + b;
+        a=b;
+        b=temp;
+    }
+    return a;
 }
 
 /* PYTHON:   count = 0;  for i in range(n): count += 1;  return count */
 long simple_loop(long n)
 {
-    /* TODO (Lab 06) */
-    (void) n;
-    return 0;
+    long count=0;
+    for (long i = 0; i < n; i++) {
+        count += 1;
+    }
+    return count; 
 }
 
 /* PYTHON:   dos for anidados de range(n), count += 1 en el de adentro */
 long double_loop(long n)
 {
-    /* TODO (Lab 06) */
-    (void) n;
-    return 0;
+    long count=0;
+    for (long i = 0; i < n; i++) {
+        for (long j = 0; j < n; j++) {
+            count += 1;
+        }
+    }
+    return count;
 }

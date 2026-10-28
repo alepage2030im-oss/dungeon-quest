@@ -46,12 +46,11 @@ int main(void)
                 cronometro_tabla();
                 pausa();
                 break;
-                
             case 3:
                 guardian_jugar(7);
                 pausa();
                 break;
-
+                
             case 0:
                 printf("\n  Hasta la proxima, aventurero.\n\n");
                 break;

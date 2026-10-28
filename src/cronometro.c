@@ -43,6 +43,7 @@ void cronometro_tabla(void)
         double t = medir(simple_loop, ns_simple[i], &r);
         printf("simple_loop %ld %.6f\n", ns_simple[i], t);
     }
+    printf("\n");
     for (int i = 0; i < 3; i++) {
         double t = medir(double_loop, ns_double[i], &r);
         printf("double_loop %ld %.6f\n", ns_double[i], t);

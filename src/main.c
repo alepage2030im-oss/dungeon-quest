@@ -42,11 +42,15 @@ int main(void)
                 ver_hechizos();
                 pausa();
                 break;
-
-            /* TODO (Lab 06): agrega aqui
-             *   case 2 -> cronometro_tabla();  y luego pausa();
-             *   case 3 -> guardian_jugar(7);   y luego pausa();
-             * No olvides el break de cada case. */
+            case 2:
+                cronometro_tabla();
+                pausa();
+                break;
+                
+            case 3:
+                guardian_jugar(7);
+                pausa();
+                break;
 
             case 0:
                 printf("\n  Hasta la proxima, aventurero.\n\n");

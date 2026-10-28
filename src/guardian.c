@@ -44,7 +44,7 @@ int guardian_jugar(int intentos)
         int intento = get_int ("Adivina el numero secreto (1-100): ");
         int resultado = guardian_comparar(secreto, intento);
         if (resultado == 0) {
-            printf(" Felicidades! Adivinaste el número secreto.\n");
+            printf(" Felicidades! Adivinaste el numero secreto.\n");
             return 1;
         } else if (resultado < 0) {
             printf("El numero secreto es menor que %d. Intenta de nuevo.\n", intento);

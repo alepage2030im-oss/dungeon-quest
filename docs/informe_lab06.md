@@ -55,7 +55,12 @@ Después déjalo arreglado: el repositorio tiene que compilar.
 - Enlace a tu repositorio:
     https://github.com/alepage2030im-oss/dungeon-quest
 - ¿Cuántos commits hiciste? Pega la salida de `git log --oneline`:
-
+hice en total 6 comits
 ```
-
+0ee48ed (HEAD -> main, origin/main, origin/HEAD) mini cambio en main y informe
+70d828e main y mini arreglos en guardian y cronometro
+c9bc3bb guardian
+4ec50da cronometro
+19fa9df ,
+d97b8c0 Initial commit
 ```

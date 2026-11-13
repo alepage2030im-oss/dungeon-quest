@@ -28,65 +28,68 @@ static char *copiar_texto(const char *texto)
 int inventario_agregar(Item **inv, int *cantidad, int *capacidad,
                        const char *nombre, char tipo, float peso)
 {
-    /* TODO (Lab 07):
-     *
-     * 1. Si la mochila no existe todavia (*capacidad == 0):
-     *        pide espacio para 2 items con malloc
-     *        *inv = malloc(2 * sizeof(Item));
-     *    Si malloc devuelve NULL, return 0.
-     *
-     * 2. Si esta llena (*cantidad == *capacidad):
-     *        duplica la capacidad con realloc.
-     *    CUIDADO: guarda el resultado en un puntero AUXILIAR, no en *inv:
-     *        Item *nueva = realloc(*inv, ...);
-     *        if (nueva == NULL) return 0;    <- *inv sigue siendo valido
-     *        *inv = nueva;
-     *    Si escribes  *inv = realloc(*inv, ...)  y falla, pierdes la
-     *    mochila vieja para siempre (fuga de memoria).
-     *
-     * 3. Llena el item en la posicion *cantidad:
-     *        (*inv)[*cantidad].nombre = copiar_texto(nombre);   <- una COPIA
-     *        ...tipo y peso...
-     *    Los parentesis de (*inv) son obligatorios: sin ellos C lee
-     *    *(inv[*cantidad]), que es otra cosa.
-     *
-     * 4. Incrementa *cantidad y return 1.
-     */
-    (void) inv;
-    (void) cantidad;
-    (void) capacidad;
-    (void) nombre;
-    (void) tipo;
-    (void) peso;
-    (void) copiar_texto;         /* borra esta linea cuando la uses */
-    return 0;
+    if (*capacidad == 0)
+    {
+        *inv = malloc(2 * sizeof(Item));
+        if (*inv == NULL)
+        {
+            return 0;
+        }
+        *capacidad = 2;
+    }
+    else if (*cantidad == *capacidad)
+    {
+        Item *nueva = realloc(*inv, 2 * (*capacidad) * sizeof(Item));
+        if (nueva == NULL)
+        {
+            return 0;
+        }
+        *inv = nueva;
+        *capacidad = 2 * (*capacidad);
+    }
+    (*inv)[*cantidad].nombre = copiar_texto(nombre);
+    (*inv)[*cantidad].tipo   = tipo;
+    (*inv)[*cantidad].peso   = peso;
+
+    (*cantidad)++; 
+    return 1;
+
 }
 
 float inventario_peso(const Item *inv, int cantidad)
 {
-    /* TODO (Lab 07): recorre y suma inv[i].peso */
-    (void) inv;
-    (void) cantidad;
-    return 0.0f;
+    float total = 0.0f;
+    for (int i = 0; i < cantidad; i++) {
+        total = total + inv[i].peso;
+    }
+    return total;
 }
 
 void inventario_imprimir(const Item *inv, int cantidad)
 {
-    /* TODO (Lab 07): una linea por item, con un switch sobre inv[i].tipo
-     * para mostrar "Arma", "Armadura", "Pocion" o "Varios". Al final,
-     * el peso total. Si cantidad == 0, imprime "La mochila esta vacia." */
-    (void) inv;
-    (void) cantidad;
-    printf("  (la mochila todavia no esta implementada)\n");
+    if (cantidad == 0) {
+        printf("La mochila esta vacia.\n");
+        return;
+    }
+
+    for (int i = 0; i < cantidad; i++) {
+        const char *tipo_texto;
+        switch (inv[i].tipo) {
+            case 'W': tipo_texto = "Arma";     break;
+            case 'A': tipo_texto = "Armadura"; break;
+            case 'P': tipo_texto = "Pocion";   break;
+            default:  tipo_texto = "Varios";   break;
+        }
+        printf("  %s  (%s)  %.1f kg\n", inv[i].nombre, tipo_texto, inv[i].peso);
+    }
+
+    printf("  Peso total: %.1f kg\n", inventario_peso(inv, cantidad));
 }
 
 void inventario_liberar(Item *inv, int cantidad)
 {
-    /* TODO (Lab 07):
-     *   1. free de cada inv[i].nombre   (fueron pedidos con copiar_texto)
-     *   2. free(inv)                     (fue pedido con malloc/realloc)
-     * El orden importa: si liberas inv primero, ya no puedes leer
-     * inv[i].nombre para liberarlo. */
-    (void) inv;
-    (void) cantidad;
+    for (int i = 0; i < cantidad; i++) {
+        free(inv[i].nombre);
+    }
+    free( inv );
 }

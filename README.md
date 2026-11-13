@@ -201,3 +201,22 @@ git push origin lab06
 | `implicit declaration of function` | falta el `#include` del `.h` |
 | `multiple definition of` | incluiste un `.c`, o a un `.h` le falta el include guard |
 | las pruebas no compilan | algún módulo tuyo tiene errores: `make` primero, y arregla de arriba hacia abajo |
+
+
+## Lab 07 — El Dungeon
+
+### Qué hice
+- `inventario_agregar`: agrega un item al final de la mochila. Si la mochila no existe, la crea con `malloc` (capacidad 2); si está llena, duplica su capacidad con `realloc`. El nombre se guarda como una copia propia.
+- `inventario_peso`: recorre la mochila y devuelve la suma de los pesos de todos los items.
+- `inventario_imprimir`: imprime un item por línea con su tipo (Arma, Armadura, Pocion o Varios) y su peso, y al final el peso total. Si la mochila está vacía, lo avisa.
+- `inventario_liberar`: devuelve toda la memoria: primero el nombre de cada item y después el arreglo.
+- Opción 4 del menú: `ver_mochila` crea una mochila vacía, agrega 5 objetos, la imprime con su peso total y la libera.
+
+### Cómo compilar y probar
+- Compilar: `.\compilar.bat` (o `make`)
+- Probar: `.\probar.bat` (o `make test`)
+
+Resultado: Lab 07 (inventario): 16 de 16 pruebas pasan.
+
+### ¿Por qué `inventario_agregar` recibe `Item **` y no `Item *`?
+Se usa Item ** y no Item * porque realloc, cuando la mochila crece, puede moverla a otra dirección de memoria. En C los argumentos se pasan por copia: con Item *inv la función recibiría una copia del puntero, así que solo cambiaría esa copia y mochila en main seguiría apuntando a la dirección vieja. Con Item **inv la función recibe la dirección de la variable mochila y puede escribir *inv = nueva;, cambiando directamente el puntero de main. Para que una función modifique una variable de otro, hay que darle su dirección.

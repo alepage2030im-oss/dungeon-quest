@@ -58,12 +58,22 @@ int bestiario_agregar(NodoEnemigo **cabeza, const char *nombre, int vida, int at
      *
      * 4. return 1.
      */
-    (void) cabeza;
-    (void) nombre;
-    (void) vida;
-    (void) ataque;
-    (void) nuevo_enemigo;            /* borra esta linea cuando la uses */
-    return 0;
+    NodoEnemigo *nuevo = nuevo_enemigo(nombre, vida, ataque);
+    if (nuevo == NULL) {
+        return 0;
+    }
+
+    if (*cabeza == NULL) {
+        *cabeza = nuevo;
+    }
+    else {
+        NodoEnemigo *p = *cabeza;
+        while (p->siguiente != NULL) {
+            p = p->siguiente;
+        }
+        p->siguiente = nuevo;
+    }
+    return 1;
 }
 
 int bestiario_insertar(NodoEnemigo **cabeza, int pos, const char *nombre, int vida, int ataque)
@@ -84,12 +94,26 @@ int bestiario_insertar(NodoEnemigo **cabeza, int pos, const char *nombre, int vi
      *
      * 4. return 1.
      */
-    (void) cabeza;
-    (void) pos;
-    (void) nombre;
-    (void) vida;
-    (void) ataque;
-    return 0;
+    NodoEnemigo *nuevo = nuevo_enemigo(nombre, vida, ataque);
+    if (nuevo == NULL) {
+        return 0;
+    }
+
+    if (pos <= 0 || *cabeza == NULL) {
+        nuevo->siguiente = *cabeza;
+        *cabeza = nuevo;
+    }
+    else {
+        NodoEnemigo *anterior = *cabeza;
+        int i = 1;
+        while (i < pos && anterior->siguiente != NULL) {
+            anterior = anterior->siguiente;
+            i++;
+        }
+        nuevo->siguiente = anterior->siguiente;   /* 1.º */
+        anterior->siguiente = nuevo;              /* 2.º */
+    }
+    return 1;
 }
 
 void bestiario_purgar(NodoEnemigo **cabeza)
@@ -106,7 +130,27 @@ void bestiario_purgar(NodoEnemigo **cabeza)
      *            NO avances p: el nuevo siguiente tambien puede estar muerto.
      *        si no: avanza p.
      */
-    (void) cabeza;
+    /* Parte 1: quitar a los derrotados que estén al principio */
+    while (*cabeza != NULL && (*cabeza)->vida <= 0) {
+        NodoEnemigo *muerto = *cabeza;
+        *cabeza = muerto->siguiente;
+        free(muerto->nombre);
+        free(muerto);
+    }
+
+    /* Parte 2: quitar a los derrotados del resto, mirando siempre al siguiente */
+    NodoEnemigo *p = *cabeza;
+    while (p != NULL && p->siguiente != NULL) {
+        if (p->siguiente->vida <= 0) {
+            NodoEnemigo *muerto = p->siguiente;
+            p->siguiente = muerto->siguiente;
+            free(muerto->nombre);
+            free(muerto);
+        }
+        else {
+            p = p->siguiente;
+        }
+    }
 }
 
 void bestiario_imprimir(const NodoEnemigo *cabeza)
@@ -122,16 +166,10 @@ void bestiario_imprimir(const NodoEnemigo *cabeza)
 
 void bestiario_liberar(NodoEnemigo *cabeza)
 {
-    /* TODO (Lab 08): recorre liberando, igual que la mochila pero
-     * en una lista. Por cada nodo: guarda el siguiente ANTES del free, y
-     * libera primero el nombre y despues el nodo.
-     *
-     *     while (cabeza != NULL) {
-     *         NodoEnemigo *sig = cabeza->siguiente;
-     *         free(cabeza->nombre);
-     *         free(cabeza);
-     *         cabeza = sig;
-     *     }
-     */
-    (void) cabeza;
+    while (cabeza != NULL) {
+        NodoEnemigo *sig = cabeza->siguiente;
+        free(cabeza->nombre);
+        free(cabeza);
+        cabeza = sig;
+    }
 }

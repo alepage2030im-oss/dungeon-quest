@@ -22,6 +22,8 @@
 #include "cronometro.h"
 #include "guardian.h"
 #include "inventario.h"
+#include "bestiario.h"
+#include "combate.h"
 
 /* Prototipos: C lee de arriba a abajo. Si main() llama a una funcion que
  * esta escrita mas abajo, hay que anunciarla aqui o el compilador dice
@@ -29,6 +31,7 @@
 static void mostrar_menu(void);
 static void ver_hechizos(void);
 static void ver_mochila(void);
+static void explorar_dungeon(void);
 
 int main(void)
 {
@@ -56,6 +59,10 @@ int main(void)
                 ver_mochila();
                 pausa();
                 break;
+            case 5:
+                explorar_dungeon();
+                pausa();
+                break;
             case 0:
                 printf("\n  Hasta la proxima, aventurero.\n\n");
                 break;
@@ -78,6 +85,7 @@ static void mostrar_menu(void)
     printf("   2) El cronometro: C contra Python\n");
     printf("   3) La puerta del guardian\n");
     printf("   4) Mochila\n");
+    printf("   5) Explorar el dungeon\n");
     printf("   0) Salir\n\n");
 }
 
@@ -108,4 +116,33 @@ static void ver_mochila(void)
    
     inventario_imprimir( mochila , n );
     inventario_liberar( mochila , n);
+}
+static void explorar_dungeon(void)
+{
+    NodoEnemigo *bestiario = NULL;
+    Luchador heroe = {"Heroe", 100, 12};
+
+    bestiario_agregar(&bestiario, "Goblin", 20, 4);
+    bestiario_agregar(&bestiario, "Orco",   35, 7);
+    bestiario_agregar(&bestiario, "Troll",  50, 9);
+    bestiario_agregar(&bestiario, "Dragon", 80, 15);
+
+    printf("\n  --- Los enemigos del dungeon ---\n");
+    bestiario_imprimir(bestiario);
+
+    for (NodoEnemigo *e = bestiario; e != NULL && heroe.vida > 0; e = e->siguiente) {
+        printf("\n  El heroe pelea contra %s...\n", e->nombre);
+        if (combate_pelear(&heroe, e)) {
+            printf("  Gana el heroe. Le quedan %d de vida.\n", heroe.vida);
+        } else {
+            printf("  El heroe cae derrotado.\n");
+        }
+    }
+
+    bestiario_purgar(&bestiario);
+
+    printf("\n  --- Los enemigos que quedan ---\n");
+    bestiario_imprimir(bestiario);
+
+    bestiario_liberar(bestiario);
 }

@@ -220,3 +220,22 @@ Resultado: Lab 07 (inventario): 16 de 16 pruebas pasan.
 
 ### ¿Por qué `inventario_agregar` recibe `Item **` y no `Item *`?
 Se usa Item ** y no Item * porque realloc, cuando la mochila crece, puede moverla a otra dirección de memoria. En C los argumentos se pasan por copia: con Item *inv la función recibiría una copia del puntero, así que solo cambiaría esa copia y mochila en main seguiría apuntando a la dirección vieja. Con Item **inv la función recibe la dirección de la variable mochila y puede escribir *inv = nueva;, cambiando directamente el puntero de main. Para que una función modifique una variable de otro, hay que darle su dirección.
+
+## Lab 08 — El Bestiario
+
+### Qué hice
+- `bestiario_agregar`: agrega un enemigo al final de la lista enlazada. Si la lista está vacía, el nuevo nodo pasa a ser la cabeza.
+- `bestiario_insertar`: inserta un enemigo en una posición dada. Si la posición es 0 o negativa va al principio, y si es mayor que el largo va al final.
+- `bestiario_purgar`: quita y libera a los enemigos con vida ≤ 0, tanto al principio como en medio y al final.
+- `bestiario_liberar`: recorre la lista liberando el nombre y el nodo de cada enemigo.
+- `combate_pelear`: el héroe y el enemigo se golpean por turnos, empezando el héroe. Devuelve 1 si gana el héroe y 0 si pierde o si nadie puede hacer daño.
+- Opción 5 del menú: `explorar_dungeon` crea el bestiario, hace pelear al héroe contra cada enemigo, purga a los derrotados, muestra a los que quedan y libera la lista.
+
+### Cómo compilar y probar
+- Compilar: `.\compilar.bat` (o `make`)
+- Probar: `.\probar.bat` (o `make test`)
+
+Resultado: Lab 08 (bestiario y combate): 20 de 20 pruebas pasan.
+
+### ¿Por qué el bestiario recibe `&cabeza` (`NodoEnemigo **`) y no `cabeza`?
+A veces las funciones cambian la cabeza de la lista: bestiario_agregar cuando la lista está vacía, bestiario_insertar cuando se inserta en la posición 0, y bestiario_purgar cuando el primer enemigo está derrotado. La cabeza es la variable bestiario de main. En C los argumentos se pasan por copia: si recibiera NodoEnemigo *cabeza, modificaría una copia local del puntero, y la variable de main seguiría apuntando al nodo viejo, a NULL o a un nodo ya liberado. Con NodoEnemigo **cabeza recibe la dirección de esa variable y puede escribir en *cabeza (por ejemplo *cabeza = nuevo;), cambiando la de main.

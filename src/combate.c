@@ -21,7 +21,18 @@ int combate_pelear(Luchador *heroe, NodoEnemigo *enemigo)
      * Usa -> porque los dos son PUNTEROS: asi las vidas cambian de verdad
      * en quien llamo a la funcion.
      */
-    (void) heroe;
-    (void) enemigo;
-    return 0;
+    if (heroe->ataque <= 0 && enemigo->ataque <= 0) {
+        return 0;
+    }
+
+    while (1) {
+        enemigo->vida -= heroe->ataque;
+        if (enemigo->vida <= 0) {
+            return 1;
+        }
+        heroe->vida -= enemigo->ataque;
+        if (heroe->vida <= 0) {
+            return 0;
+        }
+    }
 }
